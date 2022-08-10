@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         distro: [jammy, focal, bionic]
-        arch: [x86_64]
+        arch: [x86_64, aarch64]
 
     env:
       DISTRO: ${{ matrix.distro }} # build target, name required by binary-builder
