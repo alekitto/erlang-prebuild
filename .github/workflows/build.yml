@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.arch == 'aarch64' && 'self-hosted' || 'ubuntu-latest' }}
     continue-on-error: ${{ matrix.distro == 'jammy' }}
 
     strategy:
@@ -26,6 +26,7 @@ jobs:
           - jammy
         arch:
           - x86_64
+          - aarch64
 
     env:
       DISTRO: ${{ matrix.distro }} # build target, name required by binary-builder
@@ -33,6 +34,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          driver: docker
 
       - name: binary-builder
         uses: renovatebot/internal-tools@011b3cb083cc0343480e1552a58ebc2af9a2da35 # v1.15.2
